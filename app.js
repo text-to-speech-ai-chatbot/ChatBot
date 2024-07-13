@@ -38,48 +38,48 @@ async function init() {
       audioChunks = []
 
       const { text, elapsedTime } = await sendToWhisperAPI(audioBlob)
-      resultDiv.innerHTML = `
-      <p>${text}</p>
-      ${
-        elapsedTime
-          ? `<small class="elapsed-time">Rendered in ${elapsedTime} seconds</small>`
-          : ''
-      }
-    `
+    //   resultDiv.innerHTML = `
+    //   <p>${text}</p>
+    //   ${
+    //     elapsedTime
+    //       ? `<small class="elapsed-time">Rendered in ${elapsedTime} seconds</small>`
+    //       : ''
+    //   }
+    // `
     })
 
-    startRecordingButton.addEventListener('click', () => {
-      // Clear the previous result when the button is clicked
-      resultDiv.textContent = ''
+    // startRecordingButton.addEventListener('click', () => {
+    //   // Clear the previous result when the button is clicked
+    //   resultDiv.textContent = ''
 
-      if (mediaRecorder.state === 'recording') {
-        mediaRecorder.stop()
-        startRecordingButton.textContent = 'Start Recording'
-      } else {
-        mediaRecorder.start()
-        silenceStart = Date.now()
-        startRecordingButton.textContent = 'Stop Recording'
-      }
-    })
+    //   if (mediaRecorder.state === 'recording') {
+    //     mediaRecorder.stop()
+    //     startRecordingButton.textContent = 'Start Recording'
+    //   } else {
+    //     mediaRecorder.start()
+    //     silenceStart = Date.now()
+    //     startRecordingButton.textContent = 'Stop Recording'
+    //   }
+    // })
   } catch (err) {
     console.error('Error initializing media recorder:', err)
     alert('Failed to get access to the microphone.')
   }
 }
 
-function checkForSilence(inputBuffer) {
-  const isSilent = isBufferSilent(inputBuffer)
-  if (isSilent) {
-    if (Date.now() - silenceStart > silenceDuration * 1000) {
-      if (mediaRecorder.state === 'recording') {
-        mediaRecorder.stop()
-        startRecordingButton.textContent = 'Start Recording'
-      }
-    }
-  } else {
-    silenceStart = Date.now()
-  }
-}
+// function checkForSilence(inputBuffer) {
+//   const isSilent = isBufferSilent(inputBuffer)
+//   if (isSilent) {
+//     if (Date.now() - silenceStart > silenceDuration * 1000) {
+//       if (mediaRecorder.state === 'recording') {
+//         mediaRecorder.stop()
+//         startRecordingButton.textContent = 'Start Recording'
+//       }
+//     }
+//   } else {
+//     silenceStart = Date.now()
+//   }
+// }
 
 function isBufferSilent(buffer) {
   const threshold = 0.02
@@ -116,6 +116,25 @@ async function sendToWhisperAPI(audioBlob) {
     alert('Failed to send audio to Whisper API.')
     return 'Error: Failed to convert speech to text.'
   }
+}
+
+function sendTextToVoiceflow(text) {
+  const projectId = "6690d6f00b546ef70f5073f1";
+  const url = `https://general-runtime.voiceflow.com/state/user/${projectId}/interact`;
+  const voiceflowEndpoint = url;  fetch(voiceflowEndpoint, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+    },
+    body: JSON.stringify({ text }),
+  })
+    .then((response) => response.json())
+    .then((data) => {
+      console.log('Response from Voiceflow:', data);
+    })
+    .catch((error) => {
+      console.error('Error sending text to Voiceflow:', error);
+    });
 }
 
 init()
