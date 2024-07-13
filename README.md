@@ -47,7 +47,7 @@ docker run -d -p 9000:9000 -e ASR_MODEL=base.en onerahmet/openai-whisper-asr-web
 5. Start the proxy server:
 
 ```bash
-npm start
+npm start or nodemon proxy.js
 ```
 
 The proxy server should now be running at http://localhost:3000.
