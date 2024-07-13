@@ -11,6 +11,8 @@ let silenceStart
 const silenceDuration = 2 // in seconds
 const whisperEndpoint =
   'http://localhost:3000/proxy/asr?task=transcribe&output=json'
+  const authKey = 'VF.DM.669105e2d4c5dd4ff9cab0b1.u3H3Rr2XHrHaM20F'
+  const versionID = "6690d6f00b546ef70f5073f1"
 
 async function init() {
   try {
@@ -46,6 +48,7 @@ async function init() {
           : ''
       }
     `
+    await sendTextToVoiceflow(text);
     })
 
     startRecordingButton.addEventListener('click', () => {
@@ -119,12 +122,14 @@ async function sendToWhisperAPI(audioBlob) {
 }
 
 function sendTextToVoiceflow(text) {
+  console.log("entering function")
   const projectId = "6690d6f00b546ef70f5073f1";
-  const url = `https://general-runtime.voiceflow.com/state/user/${projectId}/interact`;
+  const url = `https://general-runtime.voiceflow.com/state/user/${projectId}/interact?versionID=${versionID}`;
   const voiceflowEndpoint = url;  fetch(voiceflowEndpoint, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
+      Authorization: `Bearer ${authKey}`,
     },
     body: JSON.stringify({ text }),
   })
