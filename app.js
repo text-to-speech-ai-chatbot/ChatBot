@@ -121,25 +121,36 @@ async function sendToWhisperAPI(audioBlob) {
   }
 }
 
-function sendTextToVoiceflow(text) {
-  console.log("entering function")
+async function sendTextToVoiceflow(text) {
   const projectId = "6690d6f00b546ef70f5073f1";
-  const url = `https://general-runtime.voiceflow.com/state/user/${projectId}/interact?versionID=${versionID}`;
-  const voiceflowEndpoint = url;  fetch(voiceflowEndpoint, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json',
-      Authorization: `Bearer ${authKey}`,
+  const url = `https://general-runtime.voiceflow.com/state/user/${projectId}/interact`;
+  const voiceflowEndpoint = url;
+  const authKey = "VF.DM.669105e2d4c5dd4ff9cab0b1.u3H3Rr2XHrHaM20F";
+  const data = {
+    action: {
+      type: "text",
+      payload: text,
     },
-    body: JSON.stringify({ text }),
+  };
+  await fetch(voiceflowEndpoint, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+      Authorization: authKey,
+    },
+    body: JSON.stringify(data),
   })
     .then((response) => response.json())
     .then((data) => {
-      console.log('Response from Voiceflow:', data);
+      console.log("Response from Voiceflow:", data);
+      console.log(data[1].payload.message)
+      resultDiv.innerHTML = `
+      <p>${data[1].payload.message}</p>`
     })
     .catch((error) => {
-      console.error('Error sending text to Voiceflow:', error);
+      console.error("Error sending text to Voiceflow:", error);
     });
 }
+
 
 init()
