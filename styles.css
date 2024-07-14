@@ -1,0 +1,22 @@
+body {
+  font-family: Arial, sans-serif;
+}
+
+#result {
+  font-size: 1.2rem;
+  font-weight: bold;
+  min-height: 200px;
+}
+
+.elapsed-time {
+  font-weight: normal;
+  color: rgb(0, 102, 255);
+}
+
+.you{
+  height: 20px;
+  background-color: darkcyan;
+  color: white;
+}
+
+ 
