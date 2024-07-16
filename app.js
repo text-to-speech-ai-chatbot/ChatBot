@@ -97,6 +97,7 @@ function isBufferSilent(buffer) {
 async function sendToWhisperAPI(audioBlob) {
   const formData = new FormData();
   formData.append('audio_file', audioBlob, 'audio.mp3');
+  formData.append('language', 'hi'); 
 
   const response = await fetch(whisperEndpoint, {
     method: 'POST',
